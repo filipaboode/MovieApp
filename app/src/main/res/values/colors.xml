@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black_900">#141414</color>   <!-- Night -->
+    <color name="black_800">#1E1E1E</color>   <!-- Extra black -->
+    <color name="red_primary">#E50914</color> <!-- Red -->
+    <color name="gray_400">#B3B3B3</color>    <!-- Silver -->
+    <color name="gold">#FFD700</color>        <!-- Rating star etc -->
+    <color name="white">#FFFFFF</color>
+</resources>
