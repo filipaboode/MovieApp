@@ -5,9 +5,17 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import org.json.JSONException
 
-
+/**
+ * Wrapper class for interacting with The Movie Database (TMDB) REST API
+ * Uses Volley for network communication and returns parsed Movie objects
+ * via callback functions. The API key is hardcoded for simplicity
+ * Provides three main endpoints:
+ * searchMovies() : search movies by keyword
+ * getPopular()   : get currently popular movies
+ * getMovieById() : fetch detailed info for a specific movie
+ */
 class TmdbApi (private val ctx: Context) {
-    private val API_KEY = "a57229e1c8e4536b6e8b9e1bf365324c"
+    private val API_KEY = "a57229e1c8e4536b6e8b9e1bf365324c" //API key
 
     fun searchMovies(
         query: String,
@@ -24,7 +32,7 @@ class TmdbApi (private val ctx: Context) {
                 try {
                     val arr = json.getJSONArray("results")
                     val list = ArrayList<Movie>(arr.length())
-                    for (i in 0 until arr.length()) {
+                    for (i in 0 until arr.length()) {  // Parse each movie in the results array
                         val o = arr.getJSONObject(i)
                         val genreArr = o.optJSONArray("genre_ids")
                         val genres = mutableListOf<Int>()
@@ -53,11 +61,11 @@ class TmdbApi (private val ctx: Context) {
             },
             { err -> onError(err)}
         )
-
+        // Add request to the shared Volley queue
         VolleyClient.add(ctx, req)
 
     }
-
+    // Fetch popular movies currently trending on TMDB
     fun getPopular(
         onSuccess: (List<Movie>) -> Unit,
         onError: (Throwable) -> Unit
@@ -105,7 +113,7 @@ class TmdbApi (private val ctx: Context) {
         )
         VolleyClient.add(ctx, req)
     }
-
+    // Fetch a single movie by its TMDB ID
     fun getMovieById(
         id: Int,
         onSuccess: (Movie) -> Unit,

@@ -3,6 +3,8 @@ package com.example.movieapp.data.db
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
+// Dao for everything related to favorites
+
 @Dao
 interface FavoriteDao {
 

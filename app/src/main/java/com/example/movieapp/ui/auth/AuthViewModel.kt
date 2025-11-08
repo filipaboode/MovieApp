@@ -9,8 +9,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+/**
+ * Enum representing current authentication mode
+ * LOGIN = existing user
+ * REGISTER = create a new account
+ */
 enum class AuthMode { Login, Register }
 
+/**
+ * Data class representing all UI state for the authentication screen
+ * Used to bind and reactively update Compose UI
+ */
 data class AuthUiState(
     val mode: AuthMode = AuthMode.Login,
     val username: String = "",
@@ -22,6 +31,13 @@ data class AuthUiState(
     val userId: Long? = null
 )
 
+/**
+ * ViewModel responsible for handling authentication logic:
+ * Switching between login/register modes
+ * Validating input
+ * Inserting new users into Room DB
+ * Logging in existing users
+ */
 class AuthViewModel(app: Application) : AndroidViewModel(app) {
     private val userDao = DatabaseProvider.get(app).userDao()
 
@@ -34,7 +50,7 @@ class AuthViewModel(app: Application) : AndroidViewModel(app) {
             error = null
         )
     }
-
+    /** Field update functions for username, email, and password */
     fun updateUsername(v: String) {_ui.value = _ui.value.copy(username = v)}
     fun updateEmail(v: String) {_ui.value = _ui.value.copy(email = v)}
     fun updatePassword(v: String) {_ui.value = _ui.value.copy(password =v)}

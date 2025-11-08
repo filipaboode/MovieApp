@@ -12,7 +12,10 @@ import com.example.movieapp.ui.qr.generateQrBitmap
 import com.example.movieapp.ui.theme.Night
 import com.example.movieapp.ui.theme.PureWhite
 
-
+/**
+ * Screen that displays the user’s unique QR code generated from their favorite movies
+ * The QR is created from a JSON payload and rendered as a Bitmap using the ZXing library
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 

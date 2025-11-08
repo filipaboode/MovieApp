@@ -17,6 +17,10 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 
+/**
+ * Represents the complete UI state for the Home screen.
+ * Stores search queries, loading state, movie results, favorites and genre filters
+ */
 data class HomeUiState(
     val query: String = "",
     val isLoading: Boolean = true,
@@ -28,6 +32,11 @@ data class HomeUiState(
     val selectedGenreId: Int? = null
 )
 
+/**
+ * ViewModel is responsible for managing data and logic for the Home Screen
+ * Handles the communication between the UI, the API and the local Room database
+ *
+ */
 class HomeViewModel(app: Application) : AndroidViewModel(app) {
     private val api = TmdbApi(app)
     private val favDao = DatabaseProvider.get(app).favoriteDao()
@@ -40,7 +49,10 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         loadPopular()
     }
 
-
+    /**
+     * Sets the active user and begins observing the users favorites in real time
+     * Updates the UI state automatically whenever database changes occur
+     */
     fun setActiveUser(id: Long) {
         if (userId == id) return
         userId = id
@@ -60,10 +72,15 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    // Updates the current search query in state.
     fun updateQuery(q: String) {
         _ui.value = _ui.value.copy(query = q)
     }
 
+    /**
+     * Executes a search request through the TMDB API
+     * Falls back to popular movies if the search query is empty
+     */
     fun search() {
         val q = _ui.value.query.trim()
         if (q.isBlank()) {
@@ -78,6 +95,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
     }
 
+    // Loads pouplar movies using the API and updates the UI state
     private fun loadPopular() {
         _ui.value = _ui.value.copy(isLoading = true, error = null)
         api.getPopular(
@@ -86,6 +104,10 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         )
     }
 
+    /**
+     * Toggles the favorite state of a movie for the current user
+     * If already a favorite, removes it, otherwise adds it to the database
+     */
     fun toggleFavorite(movie: Movie) {
         val uid = userId ?: return
         viewModelScope.launch {
@@ -115,6 +137,10 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     fun favoritesFlowFor(userId: Long): Flow<List<FavoriteEntity>> =
         favDao.favoritesFlow(userId)
 
+    /**
+     * Builds a JSON payload representing the current user's favorite movies
+     * This payload is later used for QR code generation and sharing
+     */
     fun buildFavoritesPayload(): String {
         val favs = _ui.value.favorites
         val arr = JSONArray()
@@ -126,6 +152,10 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         return obj.toString()
     }
 
+    /**
+     * Loads a list of movies by their IDs and stores them as imported favorites
+     * Used after scanning a friend's QR code to show their shared list
+     */
     fun loadImportedFavorites(ids: List<Int>) {
 
         _ui.update { it.copy(importedFavorites = emptyList()) }
@@ -146,6 +176,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             }
         }
     }
+    // Updates the currently selected genre for filtering the movie list
     fun selectGenre(id: Int?) {
         _ui.update { it.copy(selectedGenreId = id)}
     }

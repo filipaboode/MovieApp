@@ -1,6 +1,5 @@
 package com.example.movieapp.ui.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,8 +17,8 @@ import com.example.movieapp.ui.theme.*
 @Composable
 
 fun MovieDetailsScreen(
-    movie: Movie,
-    onBack: () -> Unit
+    movie: Movie,  // the movie the user tapped on in HomeScreen
+    onBack: () -> Unit  // callback to go back to the previous screen
 ) {
     Surface(color = Night) {
         Scaffold(

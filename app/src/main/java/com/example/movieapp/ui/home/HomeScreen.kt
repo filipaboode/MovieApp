@@ -47,8 +47,9 @@ fun HomeScreen(
     onMovieClick: (Movie) -> Unit,
     onSelectGenre: (Int?) -> Unit
 ) {
-    var menuOpen by remember { mutableStateOf(false) }
+    var menuOpen by remember { mutableStateOf(false) }  // Controls whether the top-right menu is open
 
+    // Filter the movie list based on the selected genre
     val visibleMovies by remember(state.movies, state.selectedGenreId) {
         mutableStateOf(
             if (state.selectedGenreId == null || state.selectedGenreId == 0) {
@@ -84,6 +85,7 @@ fun HomeScreen(
                     .padding(padding)
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
+                // Search bar
                 OutlinedTextField(
                     value = state.query,
                     onValueChange = onQueryChange,
@@ -108,7 +110,7 @@ fun HomeScreen(
                 )
 
                 Spacer(Modifier.height(12.dp))
-
+                // Genre chips row (All, Action, Comedy and more)
                 GenreRow(
                     selectedId = state.selectedGenreId,
                     onSelect = onSelectGenre
@@ -126,6 +128,7 @@ fun HomeScreen(
                     )
                 }
 
+                // Movie list
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(bottom = 24.dp)
@@ -162,11 +165,15 @@ fun HomeScreen(
         }
     }
 
+/**
+ * This lets the user quickly filter the movie list.
+ */
 @Composable
 private fun GenreRow(
     selectedId: Int?,
     onSelect: (Int?) -> Unit
 ) {
+    // These are hardcoded to the most popular genres
     val genres = listOf(
         0 to "All",
         28 to "Action",
@@ -200,6 +207,9 @@ private fun GenreRow(
     }
 }
 
+/**
+ * Single movie row showing poster, title, rating and a favorite button.
+ */
 @Composable
 private fun MovieListItem(
     movie: Movie,
@@ -241,6 +251,7 @@ Row(
     }
     Spacer(Modifier.width(8.dp))
 
+    // Heart button to toggle favorites
     IconToggleButton(
         checked = isFavorite,
         onCheckedChange = { onToggleFavorite() },

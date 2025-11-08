@@ -3,6 +3,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 
+// Dao for user auth tasks
+// Very small and checks if an for eg. an email already exists.
 @Dao
 
 interface UserDao {

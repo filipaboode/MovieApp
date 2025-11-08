@@ -19,9 +19,9 @@ import androidx.compose.material.icons.filled.Favorite
 @Composable
 
 fun FavoritesScreen (
-    items: List<FavoriteEntity>,
-    onBack: () -> Unit,
-    onToggleFavorite: (Int) -> Unit
+    items: List<FavoriteEntity>, // favorites to show
+    onBack: () -> Unit,  // go back to home
+    onToggleFavorite: (Int) -> Unit // called when user clicks the heart to remove
 ) {
     Surface(color = Night) {
         Scaffold(
@@ -36,12 +36,12 @@ fun FavoritesScreen (
                 )
             }
         ) { padding ->
-            if (items.isEmpty()) {
+            if (items.isEmpty()) {    // If the user has no favorites yet, show empty state text
                 Box(
                     Modifier.fillMaxSize().padding(padding),
                     contentAlignment = androidx.compose.ui.Alignment.Center
                 ) {  Text("No favorites yet", color = Silver) }
-            } else {
+            } else {   // Otherwise show the favorites in a list
                 LazyColumn(
                     contentPadding = PaddingValues(16.dp),
                     modifier = Modifier.padding(padding)
@@ -65,7 +65,7 @@ private fun FavoriteRow(
     item: FavoriteEntity,
     onToggle: () -> Unit
 ) {
-    Row(
+    Row(   // One favorite movie row
         Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
@@ -86,7 +86,7 @@ private fun FavoriteRow(
             Text("★ %.1f".format(item.voteAverage), color = Gold)
         }
         Spacer(Modifier.width(8.dp))
-        IconButton(onClick = onToggle) {
+        IconButton(onClick = onToggle) {    // Heart button to remove from favorites
             Icon(
                 imageVector = androidx.compose.material.icons.Icons.Filled.Favorite,
                 contentDescription = "Remove favorite",

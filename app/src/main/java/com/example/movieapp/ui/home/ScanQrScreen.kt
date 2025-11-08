@@ -18,12 +18,12 @@ import org.json.JSONObject
 @Composable
 fun ScanQrScreen(
     onBack: () -> Unit,
-    onFavoritesScanned: (List<Int>) -> Unit
+    onFavoritesScanned: (List<Int>) -> Unit //Called when successfully parsed a list of movie IDs from the QR code
 ) {
-    val launcher = rememberLauncherForActivityResult(ScanContract()) { result ->
+    val launcher = rememberLauncherForActivityResult(ScanContract()) { result ->   // Launcher that opens the camera and returns the scan reuslt
         val text = result?.contents.orEmpty()
 
-
+// Try to interpret the scanned text as our JSON payload
         val ids: List<Int>? = try {
             val obj = JSONObject(text)
             if (obj.optString("type") == "favorites") {
@@ -35,14 +35,14 @@ fun ScanQrScreen(
         } catch (e: Exception) {
             null
         }
-
+        // If we got valid IDs, send them back to the caller, otherwise just go back
         if (ids != null) {
             onFavoritesScanned(ids)
         } else {
             onBack()
         }
     }
-
+// Start scanning as soon as the screen is shown
     LaunchedEffect(Unit) {
         val options = ScanOptions()
             .setDesiredBarcodeFormats(ScanOptions.QR_CODE)
@@ -51,7 +51,7 @@ fun ScanQrScreen(
             .setBarcodeImageEnabled(false)
         launcher.launch(options)
     }
-
+    // Simple UI while camera is open / returning a result
     Surface(color = Night) {
         Scaffold(
             containerColor = Night,

@@ -23,6 +23,11 @@ import com.example.movieapp.ui.theme.Night
 import com.example.movieapp.ui.theme.RedPrimary
 import com.example.movieapp.ui.theme.Silver
 
+/**
+ * Authentication screen used for both login and registration
+ * The UI dynamically changes based on the current AuthMode Login or Register
+ * It uses reactive Compose state management to reflect input and loading states
+ */
 @Composable
 
 fun AuthScreen(
@@ -48,6 +53,10 @@ fun AuthScreen(
             Spacer(Modifier.height(6.dp))
             Text(text = "CineShare", style = MaterialTheme.typography.titleMedium, color = Silver)
         }
+        /**
+         * Main authentication card
+         * Contains all form fields, buttons, and feedback messages
+         */
         Card(
             modifier = Modifier
                 .align(Alignment.Center)
@@ -103,6 +112,10 @@ fun AuthScreen(
                 }
                 Spacer(Modifier.height(16.dp))
 
+                /**
+                 * Submit button login or register
+                 * Uses Crossfade to animate between loading state and normal state
+                 */
                 Button(
                     onClick = onSubmit,
                     enabled = !state.isLoading,
@@ -117,7 +130,7 @@ fun AuthScreen(
                         ) else Text(if (state.mode == AuthMode.Login) "Log in" else "Create account")
                     }
                 }
-
+                // Toggle text between Login and Register modes
                 TextButton(
                     onClick = onToggleMode,
                     modifier = Modifier.align(Alignment.CenterHorizontally)

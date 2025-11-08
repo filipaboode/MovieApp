@@ -2,6 +2,11 @@ package com.example.movieapp.data.db
 
 import androidx.room.*
 
+/**
+ * Table that stores "user X likes movie Y" plus some movie info for quick display
+ * We also keep title/poster/vote locally so the favorites screen can show something
+ * even if we don’t re-fetch from the API
+ */
 @Entity(
     tableName = "favorites",
             indices = [Index(value = ["userId", "movieId"], unique = true)],
